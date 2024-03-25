@@ -110,18 +110,6 @@ def priority_in_list():
             continue
 
 def sort_list():
-    priority_mapping = {'🔴': 4, '🟡': 3, '🟢': 2, '': 1}
-    swapping = True
-    end = len(The_List)
-    while swapping:
-        swapping = False
-        for i in range(1, end):
-            if nums[i - 1] > nums[i]:
-                nums[i - 1], nums[i] = nums[i], nums[i - 1]
-                swapping = True
-        end -= 1
-    return The_List
-
 
 def other():
     while True:
