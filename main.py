@@ -1,5 +1,4 @@
 import pickle
-from item import Item
 
 def load_data_with_pickle(filename):
     try:
