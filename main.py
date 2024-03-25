@@ -15,6 +15,11 @@ if The_List is None:
 
 print("My to do list \n")
 
+def print_list():
+    for index, todo in enumerate(The_List):
+        print(index+1,". ", todo)
+    print()
+
 def add_to_list():
     print("\nWhat do you want to add? \n")
     myAnswer8 = input()
@@ -25,15 +30,13 @@ def add_to_list():
     print()
 
 def delete_from_list():
-    print("\nWhich item do you want to delete? type in the number of the item \n")
+    print("\nWhich item do you want to delete? type in the number of the item: \n")
     while True:
         try:
             myAnswer7 = int(input())
             del The_List[myAnswer7-1]
             print()
-            for index, todo in enumerate(The_List):
-                print(index+1,". ", todo)
-            print()
+            print_list()
             break
         except (IndexError, ValueError):
             print("Invalid input. Please enter a valid number.")
@@ -42,18 +45,16 @@ def delete_from_list():
 def move_from_list():
     while True:
         try:
-            print("\nWhich item do you want to move? type in the number of the item \n")
+            print("\nWhich item do you want to move? type in the number of the item: \n")
             myAnswer5 = int(input())
-            print("\nNow type in the number you want to move it to \n")
+            print("\nNow type in the number you want to move it to: \n")
             myAnswer6 = int(input())
             index_to_move = myAnswer5 - 1
             element = The_List.pop(index_to_move)
             new_position = myAnswer6 - 1
             The_List.insert(new_position, element)
             print()
-            for index, todo in enumerate(The_List):
-                print(index+1,". ", todo)
-            print()
+            print_list()
             break
         except (IndexError, ValueError):
             print("Invalid input. Please enter a valid number.")
@@ -66,8 +67,7 @@ def search_task(query):
 def display_search_results(results):
     if results:
         print("Search Results: \n")
-        for index, task in enumerate(results):
-            print(index + 1, ". ", task)
+        print_list()
     else:
         print("No matching tasks found.")
 
@@ -80,7 +80,7 @@ def search_in_list():
 def priority_in_list():
     while True:
         try:
-            print("\nEnter the number of the item you want to set a priority level on: \n")
+            print("\nWhich item you want to set a priority level on? type in the number of the item: \n")
             for index, todo in enumerate(The_List):
                 print(index+1, ". ", todo)
             print()
@@ -100,23 +100,64 @@ def priority_in_list():
                 print("Invalid input. Please enter 'high', 'medium', 'low' or 'none'.")
                 continue
             print("\n Priority level updated successfully.")
-            for index, todo in enumerate(The_List):
-                print(index+1, ". ", todo)
-            print()
+            print_list()
             break
         except (IndexError, ValueError):
             print("Invalid input. Please enter a valid number.")
             continue
 
-def sort_list():
+def sort_by_priority():
+    global The_List
+
+    The_new_List = sorted(The_List, key=lambda x: 3 if '🔴' in x else (2 if '🟡' in x else (1 if '🟢' in x else 0)), reverse=True)
+    print("\nSorted list based on priority:")
+    for index, task in enumerate(The_new_List):
+        print(index + 1, ". ", task)
+    print()
+    The_List = The_new_List
+
+def edit_list():
+    while True:
+        try:
+            print("\nWhat item do you want to edit? Type the number of the item: \n")
+            print_list()
+            myAnswer10 = int(input())
+            index_to_edit = myAnswer10 - 1
+            if 0 <= index_to_edit < len(The_List):
+                print("\nCurrent text:", The_List[index_to_edit])
+                print("\nEnter the new text for the task: \n")
+                new_text = input()
+                The_List[index_to_edit] = new_text
+                print("\nEnter priority level (high, medium, low or none): \n")
+                myAnswer9 = input()
+                if myAnswer9.lower() == "high":
+                    The_List[index_to_edit] = f"{The_List[index_to_edit].replace('🔴', '').replace('🟡', '').replace('🟢', '')} 🔴"
+                elif myAnswer9.lower() == "medium":
+                    The_List[index_to_edit] = f"{The_List[index_to_edit].replace('🔴', '').replace('🟡', '').replace('🟢', '')} 🟡"
+                elif myAnswer9.lower() == "low":
+                    The_List[index_to_edit] = f"{The_List[index_to_edit].replace('🔴', '').replace('🟡', '').replace('🟢', '')} 🟢"
+                elif myAnswer9.lower() == "none":
+                    The_List[index_to_edit] = The_List[index_to_edit].replace('🔴', '').replace('🟡', '').replace('🟢', '')
+                else:
+                    print("Invalid input. Please enter 'high', 'medium', 'low' or 'none'.")
+                    continue
+                print("\nTask updated successfully.")
+                print_list()
+                break
+            else:
+                print("Invalid input. Please enter a valid number.")
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
+            continue
 
 def other():
     while True:
         try:
-            print("\nWhat option do you want to choose? Type the number \n")
+            print("\nWhat option do you want to choose? Type the number: \n")
             print("1. Search")
             print("2. Set priority levels")
-            print("3. Sort list in priorities")
+            print("3. Sort list by priorities")
+            print("4. Edit")
             print()
             myAnswer4 = int(input())
             if myAnswer4 == 1:
@@ -124,7 +165,9 @@ def other():
             elif myAnswer4 == 2:
                 priority_in_list()
             elif myAnswer4 == 3:
-                sort_list()
+                sort_by_priority()
+            elif myAnswer4 == 4:
+                edit_list()
             else:
                 print("Invalid input. Please choose from the available options.")
                 continue
@@ -144,11 +187,9 @@ def save_data_with_pickle(data, filename):
 def main():
     didChange = False
     while True:
-        for index, todo in enumerate(The_List):
-            print(index+1,". ", todo)
-        print()
+        print_list()
         print("Do you want to add, delete or move something in your list?")
-        print("For other options type other \n")
+        print("For other options type 'other': \n")
         myAnswer = input()
 
         if myAnswer.lower() == "add":
@@ -182,9 +223,7 @@ def main():
                         if myAnswer3.lower() == "y":
                             save_data_with_pickle(The_List, "saved_data.pkl")
                             print()
-                            for index, todo in enumerate(The_List):
-                                print(index+1,". ", todo)
-                            print()
+                            print_list()
                             exit()
                         elif myAnswer3.lower() == "n":
                             print("Okey, Bye! \n")
