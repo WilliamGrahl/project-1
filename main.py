@@ -189,6 +189,7 @@ def save_data_with_pickle(data, filename):
 def main():
     didChange = False
     while True:
+        print()
         print_list()
         print("Do you want to add, delete or move something in your list?")
         print("For other options type 'other': \n")
