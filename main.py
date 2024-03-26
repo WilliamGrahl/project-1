@@ -67,9 +67,11 @@ def search_task(query):
 def display_search_results(results):
     if results:
         print("Search Results: \n")
-        print_list()
+        for index, todo in enumerate(results):
+            print(index+1,". ", todo)
+        print()
     else:
-        print("No matching tasks found.")
+        print("\nNo matching tasks found. \n")
 
 def search_in_list():
     print("\nEnter your search query with text or with 🔴, 🟡, 🟢: \n")
